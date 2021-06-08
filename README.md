@@ -154,7 +154,7 @@ File > Open > choose <b>/home/opc/work/motorbike.foam</b>
 </pre>
 <details>
 	<summary>Open motorbike.foam in ParaView</summary>
-<div style="text-align:center"><img src="./pictures/post-resourcemanager-deployment/10-paraview-open-motorbike-file.png"/>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/10-paraview-open-motorbike-file.png"/>
 </div>
 </details>
 
@@ -162,12 +162,12 @@ File > Open > choose <b>/home/opc/work/motorbike.foam</b>
 
 <details>
 	<summary>Before selection of <b>motorBike_</b> options</summary>
-	<div style="text-align:center"><img src="./pictures/post-resourcemanager-deployment/11-paraview-before-select.png"/>
+	<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/11-paraview-before-select.png"/>
 	</div>
 </details>
 <details>
 	<summary>After selection of <b>motorBike_</b> options</summary>
-<div style="text-align:center"><img src="./pictures/post-resourcemanager-deployment/12-paraview-after-select.png"/>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/12-paraview-after-select.png"/>
 </div>
 </details>
 
@@ -177,7 +177,7 @@ File > Open > choose <b>/home/opc/work/motorbike.foam</b>
 6. The motorbike model should appear in the large window titled <b>RenderView1</b>. Use your mouse and its left-click button to manipulate it in virtual 3D space!
 <details>
 	<summary>Motorbike model</summary>
-<div style="text-align:center"><img src="./pictures/post-resourcemanager-deployment/13-paraview-motorbike.png"/>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/13-paraview-motorbike.png"/>
 </div>
 </details>
 
