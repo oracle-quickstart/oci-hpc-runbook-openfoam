@@ -98,35 +98,24 @@ When you no longer need the deployment, you can run this command to destroy the 
 See [Third Party Licenses](https://github.com/oracle-quickstart/oci-hpc-runbook-gromacs/blob/master/Third_Party_Licenses) for Gromacs and terraform licensing, including dependencies used in this tutorial.
 
 ## Running the Application
-If the provided terraform scripts are used to launch the application, Gromacs is installed in the /mnt/block/gromacs folder and the example benchmarking model is available in /mnt/block/work folder. Run Gromacs via the following commands:
+If the provided terraform scripts are used to launch the application, OpenFOAM is installed in the /nfs/cluster/OpenFOAM/install folder and the example benchmarking model is available in /nfs/cluster/OpenFOAM/work folder. Run OpenFOAM via the following commands:
 
-1. Run Gromacs on OCI GPU shapes via the following command:
-   ```
-    gmx mdrun -s <file path> -ntmpi <# of cores> -gpu_id <GPU devices to use>
-   ```
-   where:
-     * mdrun = program that reads the input file and execues the computational chemistry analysis
-     * -s = the input file
-     * -ntmpi = the number of thread-MPI threads to start 
-     * -gpu_id = the string of digits (without delimiter) representing device id-s of the GPUs to be used
+In the following commands, replace `NP` by the number of total processes to run the model on. The maximum number is 36 * Number of nodes in your cluster
 
-   Example for VM.GPU2.1:
-   ```
-   gmx mdrun -s gromacs_benchMEM.tpr
-   ```
+```
+tar -xf motorbike_RDMA.tgz
+./Allrun NP
+```
 
-   Example for BM.GPU2.2:
-   ```
-   gmx mdrun -s gromacs_benchMEM.tpr -ntmpi 24 -gpu_id 01
-   ```
+If you are running your own model with your own script, here are the flags that you need to run on RDMA.  
 
-   Example for BM.GPU3.8:
-   ```
-   gmx mdrun -s gromacs_benchMEM.tpr -ntmpi 48 -gpu_id 01234567
-   ```
-
-2. Once the run is complete, refer to the bottom of the terminal for performance numbers. The run will show the ns/day for the number of cores that were run.
-
+```
+-mca btl self -x UCX_TLS=rc,self,sm -x HCOLL_ENABLE_MCAST_ALL=0 -mca coll_hcoll_enable 0 -x UCX_IB_TRAFFIC_CLASS=105 -x UCX_IB_GID_INDEX=3 
+```
+Additionaly, instead of disabling hyper-threading, you can also force the MPI to pin it on the first 36 cores:
+```
+--cpu-set 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35
+```
 
 ## Post-processing
 
@@ -142,7 +131,7 @@ vncpasswd
 
 Start up a vnc connection using localhost:5901 (ensure tunneling is configured), and run the following commands to start up ParaView:
 ```
-cd /nfs/cluster
+cd /nfs/cluster/ParaView-4.4.0-Qt4-Linux-64bit/bin
 ./paraview
 ```
 3. In ParaView, open the motorbike.foam file:
