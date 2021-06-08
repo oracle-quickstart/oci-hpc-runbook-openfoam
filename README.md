@@ -148,7 +148,7 @@ cd /nfs/cluster
 3. In ParaView, open the motorbike.foam file:
 <p></p>
 <pre>
-File > Open > choose <b>/home/opc/work/motorbike.foam</b>
+File > Open > choose <b>/home/opc/OpenFOAM/work/motorbike.foam</b>
 </pre>
 <details>
 	<summary>Open motorbike.foam in ParaView</summary>
