@@ -1,151 +1,164 @@
-// Copyright (c) 2017, 2019, Oracle and/or its affiliates. All rights reserved.
-
-resource "oci_core_virtual_network" "TF_VCN" {
-  cidr_block     = "10.0.0.0/16"
-  compartment_id = "${var.compartment_ocid}"
-  display_name   = "TF_${var.clusterName}_VCN"
-  dns_label      = "tfvcn"
+resource "oci_core_vcn" "vcn" {
+  count          = var.use_existing_vcn ? 0 : 1
+  cidr_block     = var.vcn_subnet
+  compartment_id = var.targetCompartment
+  display_name   = "${local.cluster_name}_VCN"
+  dns_label      = "cluster"
 }
 
-resource "oci_core_subnet" "TF_Public_Subnet" {
-  availability_domain     = "${data.oci_identity_availability_domain.ad.name}" 
-  cidr_block          = "10.0.0.0/24"
-  display_name        = "TF_${var.clusterName}_Public_Subnet"
-  dns_label           = "tfpubsubnet"
-  security_list_ids   = ["${oci_core_security_list.PUBLIC-SECURITY-LIST.id}"]
-  compartment_id      = "${var.compartment_ocid}"
-  vcn_id              = "${oci_core_virtual_network.TF_VCN.id}"
-  route_table_id      = "${oci_core_route_table.TF_PUB_RT.id}"
+resource "oci_core_security_list" "internal-security-list" {
+  count          = var.use_existing_vcn ? 0 : 1
+  vcn_id         = oci_core_vcn.vcn[0].id
+  compartment_id = var.targetCompartment
+
+  ingress_security_rules {
+    protocol = "all"
+    source   = var.vcn_subnet
+  }
+  egress_security_rules {
+    protocol    = "all"
+    destination = "0.0.0.0/0"
+  }
+
+  ingress_security_rules { 
+    protocol = "1"
+    source = "0.0.0.0/0"
+    icmp_options { 
+      type = "3"
+      code = "4"
+    }
+  }
+
+  ingress_security_rules { 
+    protocol = "1"
+    source = var.vcn_subnet
+    icmp_options { 
+      type = "3"
+    }
+  }
 }
 
-resource "oci_core_subnet" "TF_GPU_Public_Subnet" {
-  count = "1"
-  availability_domain     = "${data.oci_identity_availability_domain.gpu_ad.name}"
-  cidr_block          = "10.0.3.0/24"
-  display_name        = "TF_${var.clusterName}_GPU_Public_Subnet"
-  dns_label           = "tfgpusubnet"
-  security_list_ids   = ["${oci_core_security_list.PUBLIC-GPU-SECURITY-LIST.id}"]
-  compartment_id      = "${var.compartment_ocid}"
-  vcn_id              = "${oci_core_virtual_network.TF_VCN.id}"
-  route_table_id      = "${oci_core_route_table.TF_PUB_RT.id}"
+resource "oci_core_security_list" "public-security-list" {
+  count          = var.use_existing_vcn ? 0 : 1
+  vcn_id         = oci_core_vcn.vcn[0].id
+  compartment_id = var.targetCompartment
+
+  ingress_security_rules {
+    protocol = "all"
+    source   = var.vcn_subnet
+  }
+
+  ingress_security_rules {
+    protocol = "6"
+    source   = var.ssh_cidr
+    tcp_options {
+      max = "22"
+      min = "22"
+    }
+  }
+
+  ingress_security_rules { 
+    protocol = "1"
+    source = "0.0.0.0/0"
+    icmp_options { 
+      type = "3"
+      code = "4"
+    }
+  }
+
+  ingress_security_rules { 
+    protocol = "1"
+    source = var.vcn_subnet
+    icmp_options { 
+      type = "3"
+    }
+  }
+
+  egress_security_rules {
+    protocol    = "all"
+    destination = "0.0.0.0/0"
+  }
 }
 
-resource "oci_core_subnet" "TF_FSS_Private_Subnet" {
-  count = "1"
-  availability_domain     = "${data.oci_identity_availability_domain.fss_ad.name}"
-  cidr_block          = "10.0.2.0/24"
-  display_name        = "TF_${var.clusterName}_FSS_Private_Subnet"
-  dns_label           = "tffsssubnet"
-  security_list_ids   = ["${oci_core_security_list.PRIVATE-SECURITY-LIST.id}"]
-  compartment_id      = "${var.compartment_ocid}"
-  vcn_id              = "${oci_core_virtual_network.TF_VCN.id}"
-  route_table_id      = "${oci_core_route_table.TF_PRIV_RT.id}"
+resource "oci_core_internet_gateway" "ig1" {
+  count          = var.use_existing_vcn ? 0 : 1
+  vcn_id         = oci_core_vcn.vcn[0].id
+  compartment_id = var.targetCompartment
+  display_name   = "${local.cluster_name}_internet-gateway"
 }
 
-resource "oci_core_subnet" "TF_Private_Subnet" {
-  availability_domain     = "${data.oci_identity_availability_domain.ad.name}"
-  cidr_block          = "10.0.1.0/24"
-  display_name        = "TF_${var.clusterName}_Private_Subnet"
-  dns_label           = "tfprivsubnet"
-  security_list_ids   = ["${oci_core_security_list.PRIVATE-SECURITY-LIST.id}"]
-  compartment_id      = "${var.compartment_ocid}"
-  vcn_id              = "${oci_core_virtual_network.TF_VCN.id}"
-  route_table_id      = "${oci_core_route_table.TF_PRIV_RT.id}"
+resource "oci_core_nat_gateway" "ng1" {
+  count          = var.use_existing_vcn ? 0 : 1
+  vcn_id         = oci_core_vcn.vcn[0].id
+  compartment_id = var.targetCompartment
+  display_name   = "${local.cluster_name}_nat-gateway"
 }
 
-resource "oci_core_internet_gateway" "TF_IG" {
-  compartment_id = "${var.compartment_ocid}"
-  display_name   = "TF_${var.clusterName}_IG"
-  vcn_id         = "${oci_core_virtual_network.TF_VCN.id}"
+
+resource "oci_core_service_gateway" "sg1" {
+  count          = var.use_existing_vcn ? 0 : 1
+  vcn_id         = oci_core_vcn.vcn[0].id
+  compartment_id = var.targetCompartment
+  display_name   = "${local.cluster_name}_service-gateway"
+
+  services {
+    service_id = data.oci_core_services.services.services[0]["id"]
+  }
 }
 
-resource "oci_core_nat_gateway" "TF_NATGW" {
-        compartment_id = "${var.compartment_ocid}"
-        vcn_id         = "${oci_core_virtual_network.TF_VCN.id}"
-        display_name   = "TF_${var.clusterName}_NATGW"
-}
-
-resource "oci_core_route_table" "TF_PUB_RT" {
-  compartment_id = "${var.compartment_ocid}"
-  vcn_id         = "${oci_core_virtual_network.TF_VCN.id}"
-  display_name   = "TF_${var.clusterName}_Public_RouteTable"
+resource "oci_core_route_table" "public_route_table" {
+  count          = var.use_existing_vcn ? 0 : 1
+  compartment_id = var.targetCompartment
+  vcn_id         = oci_core_vcn.vcn[0].id
+  display_name   = "${local.cluster_name}_public_route_table"
 
   route_rules {
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
-    network_entity_id = "${oci_core_internet_gateway.TF_IG.id}"
+    network_entity_id = oci_core_internet_gateway.ig1[0].id
   }
 }
 
-resource "oci_core_route_table" "TF_PRIV_RT" {
-  compartment_id = "${var.compartment_ocid}"
-  vcn_id         = "${oci_core_virtual_network.TF_VCN.id}"
-  display_name   = "TF_${var.clusterName}_Private_RouteTable"
+resource "oci_core_route_table" "private_route_table" {
+  count          = var.use_existing_vcn ? 0 : 1
+  display_name   = "${local.cluster_name}_private_route_table"
+  compartment_id = var.targetCompartment
+  vcn_id         = oci_core_vcn.vcn[0].id
 
   route_rules {
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
-    network_entity_id = "${oci_core_nat_gateway.TF_NATGW.id}"
+    network_entity_id = oci_core_nat_gateway.ng1[0].id
+  }
+
+  route_rules {
+    destination       = data.oci_core_services.services.services[0]["cidr_block"]
+    destination_type  = "SERVICE_CIDR_BLOCK"
+    network_entity_id = oci_core_service_gateway.sg1[0].id
   }
 }
-resource "oci_core_security_list" "PRIVATE-SECURITY-LIST" {
-        display_name    = "TF_${var.clusterName}_private-security-list"
-        compartment_id  = "${var.compartment_ocid}"
-        vcn_id          = "${oci_core_virtual_network.TF_VCN.id}"
 
-        egress_security_rules {
-                destination = "0.0.0.0/0"
-                protocol    = "all"
-        }
-
-        ingress_security_rules {
-                protocol        = "all"
-                source          = "${oci_core_virtual_network.TF_VCN.cidr_block}"}
-}   
-resource "oci_core_security_list" "PUBLIC-SECURITY-LIST" {
-        display_name    = "TF_${var.clusterName}_public-security-list"
-        compartment_id  = "${var.compartment_ocid}"
-        vcn_id          = "${oci_core_virtual_network.TF_VCN.id}"
-
-        egress_security_rules {
-                destination = "0.0.0.0/0"
-                protocol    = "all"
-        }
-
-        ingress_security_rules {
-                protocol        = "all"
-                source          = "${oci_core_virtual_network.TF_VCN.cidr_block}"
-        }   
-        ingress_security_rules {
-                protocol        = 6
-                source          = "0.0.0.0/0"
-                tcp_options {
-                  "min" = "22"
-                  "max" = "22"
-                }
-        }
+resource "oci_core_subnet" "public-subnet" {
+  count               = var.use_existing_vcn ? 0 : 1
+  # availability_domain = var.ad
+  vcn_id              = oci_core_vcn.vcn[0].id
+  compartment_id      = var.targetCompartment
+  cidr_block          = trimspace(var.public_subnet)
+  security_list_ids   = [oci_core_security_list.public-security-list[0].id]
+  dns_label           = "public"
+  display_name        = "${local.cluster_name}_public_subnet"
+  route_table_id      = oci_core_route_table.public_route_table[0].id
 }
 
-resource "oci_core_security_list" "PUBLIC-GPU-SECURITY-LIST" {
-        display_name    = "TF_${var.clusterName}_public-gpu-security-list"
-        compartment_id  = "${var.compartment_ocid}"
-        vcn_id          = "${oci_core_virtual_network.TF_VCN.id}"
-
-        egress_security_rules {
-                destination = "0.0.0.0/0"
-                protocol    = "all"
-        }
-
-        ingress_security_rules {
-                protocol        = "all"
-                source          = "${oci_core_virtual_network.TF_VCN.cidr_block}"
-        }   
-        ingress_security_rules {
-                protocol        = 6
-                source          = "0.0.0.0/0"
-                tcp_options {
-                  "min" = "22"
-                  "max" = "22"
-                }
-        }
+resource "oci_core_subnet" "private-subnet" {
+  count                      = var.use_existing_vcn ? 0 : 1
+  # availability_domain        = var.ad
+  vcn_id                     = oci_core_vcn.vcn[0].id
+  compartment_id             = var.targetCompartment
+  cidr_block                 = trimspace(var.private_subnet)
+  security_list_ids          = [oci_core_security_list.internal-security-list[0].id]
+  dns_label                  = "private"
+  display_name               = "${local.cluster_name}_private_subnet"
+  prohibit_public_ip_on_vnic = true
+  route_table_id             = oci_core_route_table.private_route_table[0].id
 }
