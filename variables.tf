@@ -15,7 +15,7 @@ variable "custom_bastion_image" {
 }
 variable "bastion_boot_volume_size" {}
 variable "cluster_network_shape" { default = "BM.HPC2.36" }
-variable "instance_pool_shape" { default = "BM.Standard.E3.128" }
+variable "instance_pool_shape" { default = "VM.Standard2.4" }
 variable "node_count" {}
 variable "boot_volume_size" {}
 variable "use_marketplace_image" {}
@@ -31,10 +31,10 @@ variable "vcn_id" { default = "" }
 variable "use_existing_vcn" {}
 variable "public_subnet_id" { default = "" }
 variable "private_subnet_id" { default = "" }
-variable "vcn_subnet" { default = "172.16.0.0/21" }
-variable "public_subnet" { default = "172.16.0.0/24" }
-variable "additional_subnet" { default = "172.16.1.0/24" }
-variable "private_subnet" { default = "172.16.4.0/22" }
+variable "vcn_subnet" { default = "" }
+variable "public_subnet" { default = "" }
+variable "additional_subnet" { default = "" }
+variable "private_subnet" { default = "" }
 variable "ssh_cidr" { default = "0.0.0.0/0" }
 variable "openfoam" { default = true }
 variable "slurm" { default = false }
