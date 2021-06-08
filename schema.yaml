@@ -1,6 +1,6 @@
 ---
-title: HPC cluster
-description: Oracle Cloud HPC cluster
+title: OpenFOAM on Oracle Cloud Infrastructure
+description: Running OpenFOAM on Oracle Cloud HPC cluster
 schemaVersion: 1.1.0
 version: "2021040901"
 informationalText: Automated HPC cluster deployment
