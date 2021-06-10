@@ -50,10 +50,10 @@
     dest: "{{cluster_nfs_path}}/OpenFOAM/work"     
     
     
-- name: Create /nfs/cluster/ParaView-4
+- name: Create /nfs/cluster/paraview
   become: true
   file:
-    path: "{{cluster_nfs_path}}/"
+    path: "{{cluster_nfs_path}}/paraview"
     state: directory
     owner: opc
     mode: 0770
@@ -62,12 +62,11 @@
     
 - name: wget download paraview
   shell: 'curl -d submit="Download" -d version="v4.4" -d type="binary" -d os="Linux" -d downloadFile="ParaView-4.4.0-Qt4-Linux-64bit.tar.gz" https://www.paraview.org/paraview-downloads/download.php > {{cluster_nfs_path}}/paraview/paraview.tar.gz'
-         
       
 - name: untar paraview step 
   unarchive:
-    src: "{{cluster_nfs_path}}/paraview.tar.gz"
-    dest: "{{cluster_nfs_path}}/"         
+    src: "{{cluster_nfs_path}}/paraview/paraview.tar.gz"
+    dest: "{{cluster_nfs_path}}/paraview"         
     
     
 - name: create tcp hostfile
