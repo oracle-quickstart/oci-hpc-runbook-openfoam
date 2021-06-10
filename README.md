@@ -11,16 +11,8 @@ OpenFOAM is the free, open source CFD software released and developed primarily 
 <img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/HPC_arch_draft.png" height="500" >                                                                                                                            
                                                                                                                             
 ## Phase 2. Visualize the motorbike model on OCI
-<p></p>
-<sub><sup><sub>:clock3:</sub></sup></sub>
-&nbsp;
-<p></p>
 
 ### Step 1. Connect to your remote host via VNC.
-<p></p>
-<sub><sup><sub>:clock3:</sub></sup></sub>
-&nbsp;
-<p></p>
 
 1. Find the public IP address of your remote host after the deployment job has finished:
 <details>
@@ -104,10 +96,7 @@ language options &gt keyboard layout options &gt location services options &gt c
 </details>
 
 ### Step 2.	Visualize the simulation using ParaView.
-<p></p>
-<sub><sup><sub>:clock3:</sub></sup></sub>
-&nbsp; 
-<p></p>
+
 <!-- 2.1. Open Terminal from your VNC Viewer window:
 <p></p>
 <pre>
