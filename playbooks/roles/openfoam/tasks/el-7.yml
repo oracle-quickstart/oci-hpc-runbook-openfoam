@@ -25,7 +25,7 @@
     src: "{{cluster_nfs_path}}/OpenFOAM/install/openfoam7_OL77_RDMA.tar"
     dest: "{{cluster_nfs_path}}/OpenFOAM/install" 
     
-- name: Create /nfs/cluster/work
+- name: Create /nfs/cluster/OpenFOAM/work
   become: true
   file:
     path: "{{cluster_nfs_path}}/OpenFOAM/work"
