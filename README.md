@@ -1,170 +1,136 @@
-# <img src="https://github.com/oci-hpc/oci-hpc-runbook-openfoam/blob/master/images/openfoam.png" height="80"> Runbook
+# Stack to create an HPC cluster. 
 
-## Introduction
-This runbook is designed to assist in the assessment of the OpenFOAM CFD Software in Oracle Cloud Infrastructure. It automatically downloads and configures OpenFOAM. 
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oracle-quickstart/oci-hpc/archive/refs/heads/master.zip)
 
-OpenFOAM is the free, open source CFD software released and developed primarily by OpenCFD Ltd since 2004. It has a large user base across most areas of engineering and science, from both commercial and academic organisations. OpenFOAM has an extensive range of features to solve anything from complex fluid flows involving chemical reactions, turbulence and heat transfer, to acoustics, solid mechanics and electromagnetics.
 
-<img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/sim.gif" height="180" >
- 
-# Architecture Diagram 
-
-<img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/arch.png" height="500" >
-
-# Login
-Login to the using opc as a username:
+## Policies to deploy the stack: 
 ```
-   ssh {username}\@{bm-public-ip-address} -i id_rsa
-```
-Note that if you are using resource manager, obtain the private key from the output and save on your local machine. 
-
-# Prerequisites
-
-- Permission to `manage` the following types of resources in your Oracle Cloud Infrastructure tenancy: `vcns`, `internet-gateways`, `route-tables`, `security-lists`, `subnets`, and `instances`.
-
-- Quota to create the following resources: 1 VCN, 1 subnet, 1 Internet Gateway, 1 route rules, and 1 GPU (VM/BM) compute instance.
-
-If you don't have the required permissions and quota, contact your tenancy administrator. See [Policy Reference](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Reference/policyreference.htm), [Service Limits](https://docs.cloud.oracle.com/en-us/iaas/Content/General/Concepts/servicelimits.htm), [Compartment Quotas](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcequotas.htm).
-
-# Deployment
-Deploying this architecture on OCI can be done in different ways:
-
-## Deploy Using Oracle Resource Manager
-
-1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?region=home&zipUrl=https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/releases/latest/download/oci-hpc-runbook-openfoam-stack-latest.zip)
-
-    If you aren't already signed in, when prompted, enter the tenancy and user credentials.
-
-2. Review and accept the terms and conditions.
-
-3. Select the region where you want to deploy the stack.
-
-4. Follow the on-screen prompts and instructions to create the stack.
-
-5. After creating the stack, click **Terraform Actions**, and select **Plan**.
-
-6. Wait for the job to be completed, and review the plan.
-
-    To make any changes, return to the Stack Details page, click **Edit Stack**, and make the required changes. Then, run the **Plan** action again.
-
-7. If no further changes are necessary, return to the Stack Details page, click **Terraform Actions**, and select **Apply**. 
-8. ## Deploy Using the Terraform CLI
-
-### Clone the Module
-Now, you'll want a local copy of this repo. You can make that with the commands:
-
-    git clone https://github.com/oracle-quickstart/oci-hpc-runbook-gromacs.git
-    cd oci-hpc-runbook-gromacs
-    ls
-
-### Set Up and Configure Terraform
-
-1. Complete the prerequisites described [here](https://github.com/cloud-partners/oci-prerequisites).
-
-2. Create a `terraform.tfvars` file, and specify the following variables:
-
-```
-# Authentication
-tenancy_ocid         = "<tenancy_ocid>"
-user_ocid            = "<user_ocid>"
-fingerprint          = "<finger_print>"
-private_key_path     = "<pem_private_key_path>"
-
-# Region
-region = "<oci_region>"
-
-# Compartment
-compartment_ocid = "<compartment_ocid>"
-
-# Availability Domain
-availablity_domain_name = "<availablity_domain_name>" # for example GrCH:US-ASHBURN-AD-1
-
-````
-### Create the Resources
-Run the following commands:
-
-    terraform init
-    terraform plan
-    terraform apply
-
-### Destroy the Deployment
-When you no longer need the deployment, you can run this command to destroy the resources:
-
-## Deploy Using OCI Console
-
-* The [web console](https://github.com/oracle-quickstart/oci-hpc-runbook-gromacs/blob/master/Documentation/ManualDeployment.md#deployment-via-web-console) let you create each piece of the architecture one by one from a webbrowser. This can be used to avoid any terraform scripting or using existing templates. 
-
-## Licensing
-See [Third Party Licenses](https://github.com/oracle-quickstart/oci-hpc-runbook-gromacs/blob/master/Third_Party_Licenses) for Gromacs and terraform licensing, including dependencies used in this tutorial.
-
-## Running the Application
-If the provided terraform scripts are used to launch the application, OpenFOAM is installed in the /nfs/cluster/OpenFOAM/install folder and the example benchmarking model is available in /nfs/cluster/OpenFOAM/work folder. Run OpenFOAM via the following commands:
-
-In the following commands, replace `NP` by the number of total processes to run the model on. The maximum number is 36 * Number of nodes in your cluster
-
-```
-tar -xf motorbike_RDMA.tgz
-./Allrun NP
+allow service compute_management to use tag-namespace in tenancy
+allow service compute_management to manage compute-management-family in tenancy
+allow service compute_management to read app-catalog-listing in tenancy
+allow group user to manage all-resources in compartment compartmentName
 ```
 
-If you are running your own model with your own script, here are the flags that you need to run on RDMA.  
+## What is cluster resizing (resize.py) ?
+TODO
+
+## What is cluster autoscaling ?
+TODO
+
+## How is resizing different from autoscaling ?
+TODO
+
+## Policies for autoscaling or resizing:
+As described when you specify your variables, if you select instance-principal as way of authenticating your node, make sure your generate a dynamic group and give the following policies to it: 
+```
+Allow dynamic-group instance_principal to read app-catalog-listing in tenancy
+Allow dynamic-group instance_principal to use tag-namespace in tenancy
+```
+And also either:
 
 ```
--mca btl self -x UCX_TLS=rc,self,sm -x HCOLL_ENABLE_MCAST_ALL=0 -mca coll_hcoll_enable 0 -x UCX_IB_TRAFFIC_CLASS=105 -x UCX_IB_GID_INDEX=3 
+Allow dynamic-group instance_principal to manage compute-management-family in compartment compartmentName
+Allow dynamic-group instance_principal to manage instance-family in compartment compartmentName
+Allow dynamic-group instance_principal to use virtual-network-family in compartment compartmentName
 ```
-Additionaly, instead of disabling hyper-threading, you can also force the MPI to pin it on the first 36 cores:
+or:
+
+`Allow dynamic-group instance_principal to manage all-resources in compartment compartmentName`
+
+
+# Resizing (via resize.py or OCI console)
+TODO
+
+
+# Autoscaling
+
+The autoscaling will work in a “cluster per job” approach. This means that for job waiting in the queue, we will launch new cluster specifically for that job. Autoscaling will also take care of spinning down clusters. By default, a cluster is left Idle for 10 minutes before shutting down. Autoscaling is achieved with a cronjob to be able to quickly switch from one scheduler to the next. 
+
+To turn on autoscaling: 
+Uncomment the line in `crontab -e`:
 ```
---cpu-set 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35
+* * * * * /home/opc/autoscaling/crontab/autoscale_slurm.sh >> /home/opc/autoscaling/logs/crontab_slurm.log 2>&1
 ```
 
-## Post-processing
+# Submit
+How to submit jobs: 
+Slurm jobs can be submitted as always but a few more constraints can be set: 
+Example in `autoscaling/submit/sleep.sbatch`: 
 
-For post-processing, you can use ParaView to visualize model. 
-
-If you are using vnc, launch vncserver and create a vnc password as follows:
 ```
-sudo systemctl start vncserver@:1.service
-sudo systemctl enable vncserver@:1.service
-vncserver
-vncpasswd
+#!/bin/sh
+#SBATCH -n 72
+#SBATCH --ntasks-per-node 36
+#SBATCH --exclusive
+#SBATCH --job-name sleep_job
+#SBATCH --constraint cluster-size-2,BM.HPC2.36
+
+cd /nfs/scratch
+mkdir $SLURM_JOB_ID
+cd $SLURM_JOB_ID
+MACHINEFILE="hostfile"
+
+# Generate Machinefile for mpi such that hosts are in the same
+#  order as if run via srun
+#
+srun -N$SLURM_NNODES -n$SLURM_NNODES  hostname  > $MACHINEFILE
+sed -i 's/$/:36/' $MACHINEFILE
+
+cat $MACHINEFILE
+# Run using generated Machine file:
+sleep 1000
 ```
 
-Start up a vnc connection using localhost:5901 (ensure tunneling is configured), and run the following commands to start up ParaView:
+- cluster-size: Since clusters can be reused, you can decide to only use a cluster of exactly the right size. Created cluster will have a feature cluster-size-x. You can set the constraint cluster-size-x to make sure this matches and avoid having a 1 node job using a 16 nodes cluster. 
+
+- shape: You can specify the OCI shape that you’d like to run on as a constraint. This will make sure that you run on the right shape and also generate the right cluster. Shapes are expected to be written in OCI format: BM.HPC2.36, BM.Standard.E3.128, BM.GPU4.8,… 
+If you’d like to use flex shapes, you can use VM.Standard.E3.x with x the number of cores that you would like. 
+
+## Clusters folders: 
 ```
-cd /nfs/cluster/ParaView-4.4.0-Qt4-Linux-64bit/bin
-./paraview
+~/autoscaling/clusters/clustername
 ```
-3. In ParaView, open the motorbike.foam file:
-<p></p>
-<pre>
-File > Open > choose <b>/home/opc/OpenFOAM/work/motorbike.foam</b>
-</pre>
-<details>
-	<summary>Open motorbike.foam in ParaView</summary>
-<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/10-paraview-open-motorbike-file.png"/>
-</div>
-</details>
 
-4. Under the <b>Properties</b> pane on the left side of Paraview, select <b>Mesh Regions</b> to select everything, and then deselect the options that do not start with the string <b>motorBike_</b>. You can adjust the windows to make this section of the GUI easier to access e.g. by closing <b>PipeLine Browser</b> section by clicking <b>X</b>.
+## Logs: 
+```
+~/autoscaling/logs
+```
 
-<details>
-	<summary>Before selection of <b>motorBike_</b> options</summary>
-	<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/11-paraview-before-select.png"/>
-	</div>
-</details>
-<details>
-	<summary>After selection of <b>motorBike_</b> options</summary>
-<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/12-paraview-after-select.png"/>
-</div>
-</details>
+Each cluster will have his own log with name: `create_clustername_date.log` and `delete_clustername_date.log`
+The log of the crontab will be in `crontab_slurm.log`
 
-5. Click the green <b>Apply</b> button to render the motorbike image. If a window with a list of errors appears, titled <b>Output Messages</b>, you may close it.
-<p></p>
 
-6. The motorbike model should appear in the large window titled <b>RenderView1</b>. Use your mouse and its left-click button to manipulate it in virtual 3D space!
-<details>
-	<summary>Motorbike model</summary>
-<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/13-paraview-motorbike.png"/>
-</div>
-</details>
+## Manual clusters: 
+You can create and delete your clusters manually. 
+### Cluster Creation
+```
+/home/opc/autoscaling/create_cluster.sh NodeNumber clustername shape Cluster-network-enabled
+```
+Example: 
+```
+/home/opc/autoscaling/create_cluster.sh 4 cluster-6-amd3128 BM.Standard.E3.128 false
+```
 
+To be registered in slurm, the cluster names must be as such: 
+BM.HPC2.36: cluster-i-hpc
+BM.Standard2.52: cluster-i-std252
+VM.Standard2.x: cluster-i-std2x
+BM.Standard.E2.64: cluster-i-amd264
+VM.Standard.E2.x: cluster-i-amd2x
+BM.Standard.E3.128: cluster-i-amd3128
+VM.Standard.E3.x: cluster-i-amd3x
+BM.GPU2.2: cluster-i-gpu22
+VM.GPU2.1: cluster-i-gpu21
+BM.GPU3.8: cluster-i-gpu38
+VM.GPU3.x: cluster-i-gpu3x
+BM.GPU4.8: cluster-i-gpu48
+
+### Cluster Deletion: 
+```
+/home/opc/autoscaling/create_cluster.sh clustername
+```
+
+
+## LDAP 
+If selected bastion host will act as an LDAP server for the cluster. It's strongly recommended to leave default, shared home directory. 
+User management can be performed from the bastion using ``` cluster ``` command. 
