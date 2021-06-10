@@ -1,8 +1,11 @@
 ---
 # tasks file for openfoam
 
-
-
+- name: Install a list of packages 
+  yum:
+    name:
+      - libGLU
+    state: present
 
 - name: Create /nfs/cluster/OpenFOAM/install
   become: true
@@ -47,10 +50,10 @@
     dest: "{{cluster_nfs_path}}/OpenFOAM/work"     
     
     
-- name: Create /nfs/cluster/paraview
+- name: Create /nfs/cluster/ParaView-4
   become: true
   file:
-    path: "{{cluster_nfs_path}}/paraview"
+    path: "{{cluster_nfs_path}}/"
     state: directory
     owner: opc
     mode: 0770
@@ -63,8 +66,8 @@
       
 - name: untar paraview step 
   unarchive:
-    src: "{{cluster_nfs_path}}/paraview/paraview.tar.gz"
-    dest: "{{cluster_nfs_path}}/paraview"         
+    src: "{{cluster_nfs_path}}/paraview.tar.gz"
+    dest: "{{cluster_nfs_path}}/"         
     
     
 - name: create tcp hostfile
