@@ -143,7 +143,7 @@ click <b>Applications</b> &gt hover over <b>System Utilities</b> &gt click <b>Te
 1. Open Files from your VNC Viewer window:
 <p></p>
 <pre>
-click <b>Applications</b> &gt hover over <b>Accessories</b> &gt click <b>Files</b> &gt on the left side of the window, click <b>Home</b>
+click <b>Applications</b> &gt hover over <b>System Tools</b> &gt click <b>Terminal</b> 
 </pre>
 
 <!-- 2.2. Open Paraview by executing the following command from the Terminal instance in your VNC Viewer window:
