@@ -8,7 +8,13 @@ OpenFOAM is the free, open source CFD software released and developed primarily 
 <img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/sim.gif" height="180" >
  
 # Architecture
-<img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/HPC_arch_draft.png" height="500" >                                                                                                                            
+<img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/HPC_arch_draft.png" height="500" >                             
+## Phase 1. Run OpenFOAM
+
+<pre>
+cd /nfs/cluster/OpenFOAM/work
+./Allrun
+</pre>
                                                                                                                             
 ## Phase 2. Visualize the motorbike model on OCI
 
