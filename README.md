@@ -13,14 +13,12 @@ OpenFOAM is the free, open source CFD software released and developed primarily 
 <p></p>
 <sub><sup><sub>:clock3:</sub></sup></sub>
 &nbsp;
-<sub>15 minutes</sub>
 <p></p>
 
 ### Step 1. Connect to your remote host via VNC.
 <p></p>
 <sub><sup><sub>:clock3:</sub></sup></sub>
 &nbsp;
-<sub>5 minutes</sub>
 <p></p>
 
 1. Find the public IP address of your remote host after the deployment job has finished:
@@ -107,8 +105,7 @@ language options &gt keyboard layout options &gt location services options &gt c
 ### Step 2.	Visualize the simulation using ParaView.
 <p></p>
 <sub><sup><sub>:clock3:</sub></sup></sub>
-&nbsp;
-<sub>5 minutes</sub>
+&nbsp; 
 <p></p>
 <!-- 2.1. Open Terminal from your VNC Viewer window:
 <p></p>
