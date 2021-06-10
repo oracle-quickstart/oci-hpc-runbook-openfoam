@@ -140,7 +140,7 @@ click <b>Applications</b> &gt hover over <b>System Utilities</b> &gt click <b>Te
 </div>
 </details> -->
 
-1. Open Files from your VNC Viewer window:
+1. Open up terminal
 <p></p>
 <pre>
 click <b>Applications</b> &gt hover over <b>System Tools</b> &gt click <b>Terminal</b> 
