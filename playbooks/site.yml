@@ -156,8 +156,8 @@
         name: hyperthreading
       when: not hyperthreading|default(true)|bool
       
-    - name: fix rdma0 not up bug  
-      shell: "ifup rdma0"
+    #- name: fix rdma0 not up bug  
+      #shell: "ifup rdma0"
       
 
 - hosts: bastion
@@ -170,7 +170,8 @@
       when: monitoring|default(false)|bool
     - include_role:
         name: openfoam
-    
+    - include_role:
+        name: vnc
 
 - hosts: all
   vars:
@@ -187,7 +188,10 @@
     - include_role: 
         name: telegraf
       when: monitoring|default(false)|bool
-      
+    
+    - name: set WM_PROJECT_DIR
+      shell: "WM_PROJECT_DIR=nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/"
+    
     - name: export path  
       shell: "export PATH=/usr/mpi/gcc/openmpi-4.0.3rc4/bin/:/usr/lib64/qt5/bin/:$PATH"
       
@@ -205,3 +209,4 @@
       
     - name: source
       shell: "source ~/.bashrc" 
+
