@@ -22,9 +22,23 @@ The above baseline infrastructure provides the following specifications:
     -	                          
 ## Phase 1. Run OpenFOAM
 
-### Step 1. Navigate to Allrun
+### Step 1. Navigate to your bastion
+<pre>
+ssh -i <PRIVATE KEY PATH> opc@<IP_ADDRESS>
+</pre>
+
+### Step 2. ssh into cluster
+<pre>
+ssh hpc-node-1
+</pre>
+
+### Step 3. Navigate to OpenFOAM directory 
 <pre>
 cd /nfs/cluster/OpenFOAM/work
+</pre>
+
+### Step 4. Run OpenFOAM 
+<pre>
 ./Allrun
 </pre>
                                                                                                                             
