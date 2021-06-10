@@ -128,7 +128,7 @@ click <b>Applications</b> &gt hover over <b>Accessories</b> &gt click <b>Files</
 <!-- 2.2. Open Paraview by executing the following command from the Terminal instance in your VNC Viewer window:
 <p></p>
 <pre>
-paraview
+cd /nfs/cluster/paraview/ParaView-4.4.0-Qt4-Linux-64bit/bin
 </pre>
 <details>
 	<summary>Run ParaView on the remote host</summary>
