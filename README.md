@@ -134,7 +134,7 @@ cd /nfs/cluster/paraview/ParaView-4.4.0-Qt4-Linux-64bit/bin
 <!-- 2.3. In ParaView, open the motorbike.foam file:
 <p></p>
 <pre>
-File > Open > choose <b>/mnt/volb/work/motorbike.foam</b>
+File > Open > choose <b>/nfs/cluster/OpenFOAM/work/motorbike.foam</b>
 </pre>
 <details>
 	<summary>Open motorbike.foam in ParaView</summary>
