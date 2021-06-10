@@ -2,6 +2,7 @@
 # tasks file for openfoam
 
 - name: Install a list of packages 
+  become: true
   yum:
     name:
       - libGLU
