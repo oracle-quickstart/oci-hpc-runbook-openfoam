@@ -170,8 +170,8 @@
       when: monitoring|default(false)|bool
     - include_role:
         name: openfoam
-    - include_role:
-        name: vnc
+    # - include_role:
+    #     name: vnc
 
 - hosts: all
   vars:
@@ -192,14 +192,14 @@
     - name: set WM_PROJECT_DIR
       shell: "WM_PROJECT_DIR=nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/"
     
-    - name: export path  
-      shell: "export PATH=/usr/mpi/gcc/openmpi-4.0.3rc4/bin/:/usr/lib64/qt5/bin/:$PATH"
+    # - name: export path  
+    #   shell: "export PATH=/usr/mpi/gcc/openmpi-4.1.0rc5/bin/:/usr/lib64/qt5/bin/:$PATH"
       
     - name: tee path  
-      shell: "echo export PATH=/usr/mpi/gcc/openmpi-4.0.3rc4/bin/:'$PATH' | sudo tee -a ~/.bashrc"
+      shell: "echo export PATH=/usr/mpi/gcc/openmpi-4.1.0rc5/bin/:'$PATH' | sudo tee -a ~/.bashrc"
 
     - name: export libpath   
-      shell: "echo export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-4.0.3rc4/lib64/:'$LD_LIBRARY_PATH' | sudo tee -a ~/.bashrc"
+      shell: "echo export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-4.1.0rc5/lib64/:'$LD_LIBRARY_PATH' | sudo tee -a ~/.bashrc"
   
     - name: tee bashrc
       shell: "echo source /nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/etc/bashrc | sudo tee -a ~/.bashrc"
