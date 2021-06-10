@@ -1,136 +1,190 @@
-# Stack to create an HPC cluster. 
+# <img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/openfoam.png" height="80"> Runbook
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oracle-quickstart/oci-hpc/archive/refs/heads/master.zip)
+## Introduction
+This runbook is designed to assist in the assessment of the OpenFOAM CFD Software in Oracle Cloud Infrastructure. It automatically downloads and configures OpenFOAM. 
+OpenFOAM is the free, open source CFD software released and developed primarily by OpenCFD Ltd since 2004. It has a large user base across most areas of engineering and science, from both commercial and academic organisations. OpenFOAM has an extensive range of features to solve anything from complex fluid flows involving chemical reactions, turbulence and heat transfer, to acoustics, solid mechanics and electromagnetics.
 
+<img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/sim.gif" height="180" >
+ 
+# Architecture
+<img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/HPC_arch_draft.png" height="180" >                                                                                                                            
+                                                                                                                            
+## Phase 2. Visualize the motorbike model on OCI
+<p></p>
+<sub><sup><sub>:clock3:</sub></sup></sub>
+&nbsp;
+<sub>15 minutes</sub>
+<p></p>
 
-## Policies to deploy the stack: 
-```
-allow service compute_management to use tag-namespace in tenancy
-allow service compute_management to manage compute-management-family in tenancy
-allow service compute_management to read app-catalog-listing in tenancy
-allow group user to manage all-resources in compartment compartmentName
-```
+### Step 1. Connect to your remote host via VNC.
+<p></p>
+<sub><sup><sub>:clock3:</sub></sup></sub>
+&nbsp;
+<sub>5 minutes</sub>
+<p></p>
 
-## What is cluster resizing (resize.py) ?
-TODO
+1. Find the public IP address of your remote host after the deployment job has finished:
+<details>
+	<summary>Resource Manager</summary>
+	<p></p>
+	If you deployed your stack via Resource Manager, find the public IP address of the compute node at the bottom of the CLI console logs.
+	<p></p>
+</details>
+<details>
+	<summary>Command Line</summary>
+	<p></p>
+	If you deployed your stack via Command Line, find the public IP address of the compute node at the bottom of the console logs on the <b>Logs</b> page, or on the <b>Outputs</b> page.
+	<p></p>
+</details>
 
-## What is cluster autoscaling ?
-TODO
+2. Establish a port mapping from port 5901 on your local machine to port 5901 on the remote host.
+<details>
+	<summary>Unix-based OS</summary>
+	<p></p>
+	Establish the port mapping using the following command:
+	<p></p>
+	<pre>
+	ssh -i <b>SSH_PRIVATE_KEY_PATH</b> -L 5901:localhost:5901 opc@<b>REMOTE_HOST_IP_ADDRESS</b>
+	</pre>
+</details>
+<details>
+	<summary>Windows</summary>
+	<p></p>
+	<details>
+		<summary>a. Establish the port mapping</summary>
+		<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/01-putty-ssh-port-mappings-for-vnc"/>
+		</div>
+	</details>
+	<p></p>
+	<details>
+		<summary>b. Encrypt the SSH tunnel</summary>
+		<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/02-putty-encrypted-ssh-tunnel"/>
+		</div>
+	</details>
+</details>
+<p></p>
 
-## How is resizing different from autoscaling ?
-TODO
+3. Execute the following command on your remote machine to launch a VNCServer instance on port 5901 on the remote host:
+<p></p>
+<pre>
+vncserver
+</pre>
+<details>
+	<summary>Port mapping from localhost to remote host. Note that the user in this example is using Mac OS as a local machine.</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/04-vnc-connection-port-mapping.png"/>
+</div>
+</details>
 
-## Policies for autoscaling or resizing:
-As described when you specify your variables, if you select instance-principal as way of authenticating your node, make sure your generate a dynamic group and give the following policies to it: 
-```
-Allow dynamic-group instance_principal to read app-catalog-listing in tenancy
-Allow dynamic-group instance_principal to use tag-namespace in tenancy
-```
-And also either:
+4. On your local machine, open VNC Viewer.
 
-```
-Allow dynamic-group instance_principal to manage compute-management-family in compartment compartmentName
-Allow dynamic-group instance_principal to manage instance-family in compartment compartmentName
-Allow dynamic-group instance_principal to use virtual-network-family in compartment compartmentName
-```
-or:
+5. Enter <b>localhost:5901</b> into the search bar and press return.
+<details>
+	<summary>VNC Viewer</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/05-vnc-connection-vnc-viewer.png"/>
+</div>
+</details>
 
-`Allow dynamic-group instance_principal to manage all-resources in compartment compartmentName`
+6. Enter the password <b>HPC_oci1</b> when prompted.
 
+<details>
+	<summary>Enter VNC password</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/06-vnc-connection-enter-password.png"/>
+</div>
+</details>
 
-# Resizing (via resize.py or OCI console)
-TODO
+7. Click through the default options (<b>Next</b>, <b>Skip</b>) to get to the end with the VNC setup wizard:
 
+<p></p>
+<pre>
+language options &gt keyboard layout options &gt location services options &gt connect online accounts options
+</pre>
+<details>
+	<summary>GUI desktop options - choose language</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/07-vnc-connection-choose-language.png"/>
+</div>
+</details>
 
-# Autoscaling
+### Step 2.	Visualize the simulation using ParaView.
+<p></p>
+<sub><sup><sub>:clock3:</sub></sup></sub>
+&nbsp;
+<sub>5 minutes</sub>
+<p></p>
+<!-- 2.1. Open Terminal from your VNC Viewer window:
+<p></p>
+<pre>
+click <b>Applications</b> &gt hover over <b>System Utilities</b> &gt click <b>Terminal</b>
+</pre>
+<details>
+	<summary>Navigate to Terminal on the remote host</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/08-vnc-connection-nav-to-terminal.png"/>
+</div>
+</details> -->
 
-The autoscaling will work in a “cluster per job” approach. This means that for job waiting in the queue, we will launch new cluster specifically for that job. Autoscaling will also take care of spinning down clusters. By default, a cluster is left Idle for 10 minutes before shutting down. Autoscaling is achieved with a cronjob to be able to quickly switch from one scheduler to the next. 
+1. Open Files from your VNC Viewer window:
+<p></p>
+<pre>
+click <b>Applications</b> &gt hover over <b>Accessories</b> &gt click <b>Files</b> &gt on the left side of the window, click <b>Home</b>
+</pre>
 
-To turn on autoscaling: 
-Uncomment the line in `crontab -e`:
-```
-* * * * * /home/opc/autoscaling/crontab/autoscale_slurm.sh >> /home/opc/autoscaling/logs/crontab_slurm.log 2>&1
-```
+<!-- 2.2. Open Paraview by executing the following command from the Terminal instance in your VNC Viewer window:
+<p></p>
+<pre>
+paraview
+</pre>
+<details>
+	<summary>Run ParaView on the remote host</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/09-vnc-connection-run-paraview.png"/>
+</div>
+</details> -->
+	
+2. Open ParaView:
+<p></p>
+<pre>
+double-click <b>ParaView</b> &gt double-click <b>bin</b> &gt double-click <b>paraview</b>
+</pre>
+<!-- 2.3. In ParaView, open the motorbike.foam file:
+<p></p>
+<pre>
+File > Open > choose <b>/mnt/volb/work/motorbike.foam</b>
+</pre>
+<details>
+	<summary>Open motorbike.foam in ParaView</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/10-paraview-open-motorbike-file.png"/>
+</div>
+</details> -->
+3. In ParaView, open the motorbike.foam file:
+<p></p>
+<pre>
+File > Open > choose <b>/home/opc/work/motorbike.foam</b>
+</pre>
+<details>
+	<summary>Open motorbike.foam in ParaView</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/10-paraview-open-motorbike-file.png"/>
+</div>
+</details>
 
-# Submit
-How to submit jobs: 
-Slurm jobs can be submitted as always but a few more constraints can be set: 
-Example in `autoscaling/submit/sleep.sbatch`: 
+4. Under the <b>Properties</b> pane on the left side of Paraview, select <b>Mesh Regions</b> to select everything, and then deselect the options that do not start with the string <b>motorBike_</b>. You can adjust the windows to make this section of the GUI easier to access e.g. by closing <b>PipeLine Browser</b> section by clicking <b>X</b>.
 
-```
-#!/bin/sh
-#SBATCH -n 72
-#SBATCH --ntasks-per-node 36
-#SBATCH --exclusive
-#SBATCH --job-name sleep_job
-#SBATCH --constraint cluster-size-2,BM.HPC2.36
+<details>
+	<summary>Before selection of <b>motorBike_</b> options</summary>
+	<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/11-paraview-before-select.png"/>
+	</div>
+</details>
+<details>
+	<summary>After selection of <b>motorBike_</b> options</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/12-paraview-after-select.png"/>
+</div>
+</details>
 
-cd /nfs/scratch
-mkdir $SLURM_JOB_ID
-cd $SLURM_JOB_ID
-MACHINEFILE="hostfile"
+5. Click the green <b>Apply</b> button to render the motorbike image. If a window with a list of errors appears, titled <b>Output Messages</b>, you may close it.
+<p></p>
 
-# Generate Machinefile for mpi such that hosts are in the same
-#  order as if run via srun
-#
-srun -N$SLURM_NNODES -n$SLURM_NNODES  hostname  > $MACHINEFILE
-sed -i 's/$/:36/' $MACHINEFILE
+6. The motorbike model should appear in the large window titled <b>RenderView1</b>. Use your mouse and its left-click button to manipulate it in virtual 3D space!
+<details>
+	<summary>Motorbike model</summary>
+<div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/13-paraview-motorbike.png"/>
+</div>
+</details>
 
-cat $MACHINEFILE
-# Run using generated Machine file:
-sleep 1000
-```
-
-- cluster-size: Since clusters can be reused, you can decide to only use a cluster of exactly the right size. Created cluster will have a feature cluster-size-x. You can set the constraint cluster-size-x to make sure this matches and avoid having a 1 node job using a 16 nodes cluster. 
-
-- shape: You can specify the OCI shape that you’d like to run on as a constraint. This will make sure that you run on the right shape and also generate the right cluster. Shapes are expected to be written in OCI format: BM.HPC2.36, BM.Standard.E3.128, BM.GPU4.8,… 
-If you’d like to use flex shapes, you can use VM.Standard.E3.x with x the number of cores that you would like. 
-
-## Clusters folders: 
-```
-~/autoscaling/clusters/clustername
-```
-
-## Logs: 
-```
-~/autoscaling/logs
-```
-
-Each cluster will have his own log with name: `create_clustername_date.log` and `delete_clustername_date.log`
-The log of the crontab will be in `crontab_slurm.log`
-
-
-## Manual clusters: 
-You can create and delete your clusters manually. 
-### Cluster Creation
-```
-/home/opc/autoscaling/create_cluster.sh NodeNumber clustername shape Cluster-network-enabled
-```
-Example: 
-```
-/home/opc/autoscaling/create_cluster.sh 4 cluster-6-amd3128 BM.Standard.E3.128 false
-```
-
-To be registered in slurm, the cluster names must be as such: 
-BM.HPC2.36: cluster-i-hpc
-BM.Standard2.52: cluster-i-std252
-VM.Standard2.x: cluster-i-std2x
-BM.Standard.E2.64: cluster-i-amd264
-VM.Standard.E2.x: cluster-i-amd2x
-BM.Standard.E3.128: cluster-i-amd3128
-VM.Standard.E3.x: cluster-i-amd3x
-BM.GPU2.2: cluster-i-gpu22
-VM.GPU2.1: cluster-i-gpu21
-BM.GPU3.8: cluster-i-gpu38
-VM.GPU3.x: cluster-i-gpu3x
-BM.GPU4.8: cluster-i-gpu48
-
-### Cluster Deletion: 
-```
-/home/opc/autoscaling/create_cluster.sh clustername
-```
-
-
-## LDAP 
-If selected bastion host will act as an LDAP server for the cluster. It's strongly recommended to leave default, shared home directory. 
-User management can be performed from the bastion using ``` cluster ``` command. 
+                                                                                                                            
