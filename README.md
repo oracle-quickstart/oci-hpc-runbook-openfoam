@@ -136,10 +136,11 @@ cd /nfs/cluster/paraview/ParaView-4.4.0-Qt4-Linux-64bit/bin
 </div>
 </details> -->
 	
-2. Open ParaView:
+2. Open ParaView via Terminal:
 <p></p>
 <pre>
-double-click <b>ParaView</b> &gt double-click <b>bin</b> &gt double-click <b>paraview</b>
+cd /nfs/cluster/paraview/ParaView-4.4.0-Qt4-Linux-64bit/bin
+./paraview
 </pre>
 <!-- 2.3. In ParaView, open the motorbike.foam file:
 <p></p>
