@@ -23,9 +23,9 @@ The above baseline infrastructure provides the following specifications:
 ## Phase 1. Run OpenFOAM
 
 ### Step 1. Navigate to your bastion
-<pre>
+
 ssh -i **PRIVATE KEY PATH** opc@**IP_ADDRESS**
-</pre>
+
 
 ### Step 2. ssh into cluster
 <pre>
