@@ -24,7 +24,7 @@ The above baseline infrastructure provides the following specifications:
 
 ### Step 1. Navigate to your bastion
 
-ssh -i **PRIVATE KEY PATH** opc@**IP_ADDRESS**
+> ssh -i **PRIVATE KEY PATH** opc@**IP_ADDRESS**
 
 
 ### Step 2. ssh into cluster
