@@ -26,21 +26,20 @@ The above baseline infrastructure provides the following specifications:
 
 > ssh -i **PRIVATE KEY PATH** opc@**IP_ADDRESS**
 
-
 ### Step 2. ssh into cluster
-<pre>
-`ssh hpc-node-1`
-</pre>
+
+> `ssh hpc-node-1`
+
 
 ### Step 3. Navigate to OpenFOAM directory 
-<pre>
-`cd /nfs/cluster/OpenFOAM/work`
-</pre>
+
+>`cd /nfs/cluster/OpenFOAM/work`
+
 
 ### Step 4. Run OpenFOAM 
-<pre>
-`./Allrun **NUM OF CORES**`
-</pre>
+
+> `./Allrun **NUM OF CORES**`
+
                                                                                                                             
 ## Phase 2. Visualize the motorbike model on OCI
 
