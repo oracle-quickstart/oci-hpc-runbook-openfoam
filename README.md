@@ -24,22 +24,22 @@ The above baseline infrastructure provides the following specifications:
 
 ### Step 1. Navigate to your bastion
 <pre>
-ssh -i 'PRIVATE KEY PATH' opc@'IP_ADDRESS'
+ssh -i **PRIVATE KEY PATH** opc@**IP_ADDRESS**
 </pre>
 
 ### Step 2. ssh into cluster
 <pre>
-ssh hpc-node-1
+`ssh hpc-node-1`
 </pre>
 
 ### Step 3. Navigate to OpenFOAM directory 
 <pre>
-cd /nfs/cluster/OpenFOAM/work
+`cd /nfs/cluster/OpenFOAM/work`
 </pre>
 
 ### Step 4. Run OpenFOAM 
 <pre>
-./Allrun 'number of cores'
+`./Allrun **NUM OF CORES**`
 </pre>
                                                                                                                             
 ## Phase 2. Visualize the motorbike model on OCI
