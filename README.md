@@ -39,7 +39,7 @@ cd /nfs/cluster/OpenFOAM/work
 
 ### Step 4. Run OpenFOAM 
 <pre>
-./Allrun
+./Allrun <number of cores>
 </pre>
                                                                                                                             
 ## Phase 2. Visualize the motorbike model on OCI
