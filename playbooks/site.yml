@@ -171,8 +171,8 @@
       when: monitoring|default(false)|bool
     - include_role:
         name: openfoam
-    - include_role:
-        name: vnc
+#     - include_role:
+#         name: vnc
 
 - hosts: all
   vars:
