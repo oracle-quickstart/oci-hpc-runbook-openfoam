@@ -149,12 +149,14 @@ language options &gt keyboard layout options &gt location services options &gt c
 </details>
 
 ### Step 2.     Set up VNC Viewer
-2.1. Run the following commands in your bastion 
+<!--2.1. Run the following commands in your bastion 
+<p></p>
 ```
 sudo yum -y groupinstall  "Server with GUI"
 sudo yum -y install tigervnc-server
 ```
 choose a password when prompted after running `vncpasswd`
+-->
 
 ### Step 3.	Visualize the simulation using ParaView.
 
