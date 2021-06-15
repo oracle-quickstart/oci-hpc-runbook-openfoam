@@ -28,17 +28,17 @@ The above baseline infrastructure provides the following specifications:
 
 ### Step 2. ssh into cluster
 
-> `ssh hpc-node-1`
+> ssh hpc-node-1
 
 
 ### Step 3. Navigate to OpenFOAM directory 
 
->`cd /nfs/cluster/OpenFOAM/work`
+> cd /nfs/cluster/OpenFOAM/work
 
 
 ### Step 4. Run OpenFOAM 
 
-> `./Allrun **NUM OF CORES**`
+> ./Allrun **NUM OF CORES**
 
                                                                                                                             
 ## Phase 2. Visualize the motorbike model on OCI
