@@ -148,9 +148,18 @@ language options &gt keyboard layout options &gt location services options &gt c
 </div>
 </details>
 
-### Step 2.	Visualize the simulation using ParaView.
+### Step 2.     Set up VNC Viewer
+<!-- 2.1. Run the following commands in your bastion 
+```
+sudo yum -y groupinstall  "Server with GUI"
+sudo yum -y install tigervnc-server
+```
+choose a password when prompted after running `vncpasswd`
+-->
 
-<!-- 2.1. Open Terminal from your VNC Viewer window:
+### Step 3.	Visualize the simulation using ParaView.
+
+<!-- 3.1. Open Terminal from your VNC Viewer window:
 <p></p>
 <pre>
 click <b>Applications</b> &gt hover over <b>System Utilities</b> &gt click <b>Terminal</b>
@@ -167,7 +176,7 @@ click <b>Applications</b> &gt hover over <b>System Utilities</b> &gt click <b>Te
 click <b>Applications</b> &gt hover over <b>System Tools</b> &gt click <b>Terminal</b> 
 </pre>
 
-<!-- 2.2. Open Paraview by executing the following command from the Terminal instance in your VNC Viewer window:
+<!-- 3.2. Open Paraview by executing the following command from the Terminal instance in your VNC Viewer window:
 <p></p>
 <pre>
 cd /nfs/cluster/paraview/ParaView-4.4.0-Qt4-Linux-64bit/bin
@@ -184,7 +193,7 @@ cd /nfs/cluster/paraview/ParaView-4.4.0-Qt4-Linux-64bit/bin
 cd /nfs/cluster/paraview/ParaView-4.4.0-Qt4-Linux-64bit/bin
 ./paraview
 </pre>
-<!-- 2.3. In ParaView, open the motorbike.foam file:
+<!-- 3.3. In ParaView, open the motorbike.foam file:
 <p></p>
 <pre>
 File > Open > choose <b>/nfs/cluster/OpenFOAM/work/motorbike.foam</b>
