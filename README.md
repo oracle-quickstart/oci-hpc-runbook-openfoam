@@ -24,6 +24,20 @@ The above baseline infrastructure provides the following specifications:
 
 ### Step 1. Navigate to your bastion
 
+1. Find the public IP address of your remote host after the deployment job has finished:
+<details>
+	<summary>Resource Manager</summary>
+	<p></p>
+	If you deployed your stack via Resource Manager, find the public IP address of the compute node at the bottom of the CLI console logs.
+	<p></p>
+</details>
+<details>
+	<summary>Command Line</summary>
+	<p></p>
+	If you deployed your stack via Command Line, find the public IP address of the compute node at the bottom of the console logs on the <b>Logs</b> page, or on the <b>Outputs</b> page.
+	<p></p>
+</details>
+
 > ssh -i **PRIVATE KEY PATH** opc@**IP_ADDRESS**
 
 ### Step 2. ssh into cluster
@@ -73,27 +87,12 @@ sudo yum -y install tigervnc-server
 vncpasswd
 vncserver
 ```
-<p></p>
 Give a password when prompted after running `vncpasswd`
-	<p></p>
+`exit` from your bastion 
 	
 ### Step 3. Connect to your remote host via VNC.
 
-1. Find the public IP address of your remote host after the deployment job has finished:
-<details>
-	<summary>Resource Manager</summary>
-	<p></p>
-	If you deployed your stack via Resource Manager, find the public IP address of the compute node at the bottom of the CLI console logs.
-	<p></p>
-</details>
-<details>
-	<summary>Command Line</summary>
-	<p></p>
-	If you deployed your stack via Command Line, find the public IP address of the compute node at the bottom of the console logs on the <b>Logs</b> page, or on the <b>Outputs</b> page.
-	<p></p>
-</details>
-
-2. Establish a port mapping from port 5901 on your local machine to port 5901 on the remote host.
+1. Establish a port mapping from port 5901 on your local machine to port 5901 on the remote host.
 <details>
 	<summary>Unix-based OS</summary>
 	<p></p>
@@ -120,7 +119,7 @@ Give a password when prompted after running `vncpasswd`
 </details>
 <p></p>
 
-3. Execute the following command on your remote machine to launch a VNCServer instance on port 5901 on the remote host:
+2. Execute the following command on your remote machine to launch a VNCServer instance on port 5901 on the remote host:
 <p></p>
 <pre>
 vncserver
@@ -131,16 +130,16 @@ vncserver
 </div>
 </details>
 
-4. On your local machine, open VNC Viewer.
+3. On your local machine, open VNC Viewer.
 
-5. Enter <b>localhost:5901</b> into the search bar and press return.
+4. Enter <b>localhost:5901</b> into the search bar and press return.
 <details>
 	<summary>VNC Viewer</summary>
 <div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/05-vnc-connection-vnc-viewer.png"/>
 </div>
 </details>
 
-6. Enter the password <b>HPC_oci1</b> when prompted.
+5. Enter the password <b>HPC_oci1</b> when prompted.
 
 <details>
 	<summary>Enter VNC password</summary>
@@ -148,7 +147,7 @@ vncserver
 </div>
 </details>
 
-7. Click through the default options (<b>Next</b>, <b>Skip</b>) to get to the end with the VNC setup wizard:
+6. Click through the default options (<b>Next</b>, <b>Skip</b>) to get to the end with the VNC setup wizard:
 
 <p></p>
 <pre>
