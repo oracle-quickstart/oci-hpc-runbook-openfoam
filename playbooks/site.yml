@@ -152,13 +152,14 @@
   tasks: 
     - include_role: 
         name: rdma-interface
+
+- hosts: compute
+  become: true
+  gather_facts: true
+  tasks: 
     - include_role: 
         name: hyperthreading
       when: not hyperthreading|default(true)|bool
-      
-    #- name: fix rdma0 not up bug  
-      #shell: "ifup rdma0"
-      
 
 - hosts: bastion
   tasks: 
@@ -170,8 +171,8 @@
       when: monitoring|default(false)|bool
     - include_role:
         name: openfoam
-    # - include_role:
-        # name: vnc
+    - include_role:
+        name: vnc
 
 - hosts: all
   vars:
@@ -188,7 +189,7 @@
     - include_role: 
         name: telegraf
       when: monitoring|default(false)|bool
-    
+
     - name: set WM_PROJECT_DIR
       shell: "WM_PROJECT_DIR=nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/"
       
@@ -200,22 +201,9 @@
   
     - name: tee bashrc
       shell: "echo source /nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/etc/bashrc | sudo tee -a ~/.bashrc"
-      
-    # - lineinfile:
-    #     path: ~/.bashrc
-    #     line: "export PATH=/usr/mpi/gcc/openmpi-4.1.0rc5/bin/:'$PATH'"
-
-    # - lineinfile:
-    #     path: ~/.bashrc
-    #     line: "export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-4.1.0rc5/lib64/:'$LD_LIBRARY_PATH'"
-
-    # - lineinfile:
-    #     path: ~/.bashrc
-    #     line: "source /nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/etc/bashrc"
 
     - name: link lib
       shell: "sudo ln -s /usr/lib64/libboost_thread-mt.so /usr/lib64/libboost_thread.so" 
       
     - name: source
       shell: "source ~/.bashrc" 
-

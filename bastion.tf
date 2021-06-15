@@ -1,11 +1,15 @@
+## Copyright (c) 2020, Oracle and/or its affiliates.
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 resource "oci_core_volume" "bastion_volume" {
   count               = var.bastion_block ? 1 : 0
   availability_domain = var.bastion_ad
   compartment_id      = var.targetCompartment
   display_name        = "${local.cluster_name}-bastion-volume"
 
-  size_in_gbs = var.bastion_block_volume_size
-  vpus_per_gb = split(".", var.bastion_block_volume_performance)[0]
+  size_in_gbs  = var.bastion_block_volume_size
+  vpus_per_gb  = split(".", var.bastion_block_volume_performance)[0]
+  defined_tags = { "${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }
 
 resource "oci_core_volume_attachment" "bastion_volume_attachment" {

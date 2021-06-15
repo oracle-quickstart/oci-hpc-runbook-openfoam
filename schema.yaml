@@ -1,4 +1,5 @@
 ---
+
 title: OpenFOAM on Oracle Cloud Infrastructure
 description: Running OpenFOAM on Oracle Cloud HPC cluster
 schemaVersion: 1.1.0
@@ -186,10 +187,10 @@ variables:
         - or: 
           - eq:
             - ${bastion_shape}
-            - "VM.Standard2.1"
+            - "VM.Standard.E3.Flex"
           - eq: 
             - ${bastion_shape}
-            - "VM.Standard2.1"
+            - "VM.Standard.E4.Flex"
     required: false
   bastion_custom_memory: 
     title: Use custom memory size
@@ -200,10 +201,10 @@ variables:
         - or: 
           - eq:
             - ${bastion_shape}
-            - "VM.Standard2.1"
+            - "VM.Standard.E3.Flex"
           - eq: 
             - ${bastion_shape}
-            - "VM.Standard2.1"
+            - "VM.Standard.E4.Flex"
   bastion_memory:
     title: Memory in GBS
     type: integer
@@ -217,10 +218,10 @@ variables:
           - or: 
             - eq:
               - ${bastion_shape}
-              - "VM.Standard2.1"
+              - "VM.Standard.E3.Flex"
             - eq: 
               - ${bastion_shape}
-              - "VM.Standard2.1"
+              - "VM.Standard.E4.Flex"
         - and: 
             - ${bastion_custom_memory}
     required: false

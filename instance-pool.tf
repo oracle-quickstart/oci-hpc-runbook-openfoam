@@ -1,3 +1,6 @@
+## Copyright (c) 2020, Oracle and/or its affiliates.
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 resource "oci_core_volume" "nfs-instance-pool-volume" {
   count               = var.scratch_nfs_type_pool == "block" ? 1 : 0
   availability_domain = var.ad

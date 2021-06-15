@@ -1,3 +1,6 @@
+## Copyright (c) 2020, Oracle and/or its affiliates.
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 resource "oci_file_storage_file_system" "FSS" {
   count               = var.create_ffs ? 1 : 0
   availability_domain = var.fss_ad
