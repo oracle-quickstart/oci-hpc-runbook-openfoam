@@ -150,7 +150,7 @@ language options &gt keyboard layout options &gt location services options &gt c
 
 ### Step 2.     Set up VNC Viewer
 <!--2.1. Run the following commands in your bastion 
-<p></p>
+
 ```
 sudo yum -y groupinstall  "Server with GUI"
 sudo yum -y install tigervnc-server
