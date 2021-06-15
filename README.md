@@ -65,7 +65,19 @@ source /nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/etc/bashrc
                                                                                                                             
 ## Phase 2. Visualize the motorbike model on OCI
 
-### Step 1. Connect to your remote host via VNC.
+### Step 1.     Set up VNC Viewer
+ 1. Run the following commands in your bastion: 
+```
+sudo yum -y groupinstall  "Server with GUI"
+sudo yum -y install tigervnc-server
+vncpasswd
+vncserver
+```
+<p></p>
+Give a password when prompted after running `vncpasswd`
+	<p></p>
+	
+### Step 3. Connect to your remote host via VNC.
 
 1. Find the public IP address of your remote host after the deployment job has finished:
 <details>
@@ -147,15 +159,6 @@ language options &gt keyboard layout options &gt location services options &gt c
 <div style="text-align:center"><img src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/07-vnc-connection-choose-language.png"/>
 </div>
 </details>
-
-### Step 2.     Set up VNC Viewer
- 1. Run the following commands in your bastion: 
-```
-sudo yum -y groupinstall  "Server with GUI"
-sudo yum -y install tigervnc-server
-```
-choose a password when prompted after running `vncpasswd`
-
 
 ### Step 3.	Visualize the simulation using ParaView.
 
