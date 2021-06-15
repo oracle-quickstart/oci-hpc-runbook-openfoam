@@ -88,6 +88,7 @@ vncpasswd
 vncserver
 ```
 Give a password when prompted after running `vncpasswd`
+
 `exit` from your bastion 
 	
 ### Step 3. Connect to your remote host via VNC.
