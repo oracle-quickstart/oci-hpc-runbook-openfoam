@@ -19,7 +19,7 @@ The above baseline infrastructure provides the following specifications:
     -	6.4 TB Local NVME SSD storage per node
     -	36 cores per node
     -	384 GB memory per node
-    -	                          
+                           
 ## Phase 1. Run OpenFOAM
 
 ### Step 1. Navigate to your bastion
