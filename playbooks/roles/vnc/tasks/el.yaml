@@ -1,0 +1,161 @@
+---
+
+- name: Group Install Server with GUI
+  yum:
+    name: "@^Server with GUI"
+    state: present
+- name: install packages
+  yum:
+    name:
+      - tigervnc-server
+      - mesa-libGL
+    state: present
+- name: set graphical target
+  command: systemctl set-default graphical.target
+- name: generate service file
+  copy:
+    src: /usr/lib/systemd/system/vncserver@.service
+    dest: /etc/systemd/system/vncserver@:1.service
+- name: replace User Name
+  replace:
+    path: /etc/systemd/system/vncserver@:1.service
+    regexp: <USER>
+    replace: opc
+- name: add extra line
+  lineinfile:
+    path: /etc/systemd/system/vncserver@:1.service
+    line: PIDFile=/home/opc/.vnc/%H%i.pid
+    create: yes
+- name: mkdir
+  file:
+    path: /home/opc/.vnc/
+    state: directory
+    owner: opc
+    group: opc
+- name: set password
+  shell: "echo Oracle! | vncpasswd -f > /home/opc/.vnc/passwd"
+- name: change ownership
+  file:
+    path: /home/opc/.vnc/passwd
+    owner: opc
+    group: opc
+    mode: '600'
+- name: Make sure a service is running
+  systemd:
+    state: started
+    name: vncserver@:1.service
+    enabled: yes
+# - name: Install the 'Server with GUI' environment group (takes a while).
+#   yum:
+#     name: "@^Server with GUI"
+#     state: present
+#   async: 1200
+#   poll: 60
+
+# - name: Install TigerVNC server.
+#   yum:
+#     name: tigervnc-server
+#     state: present
+
+# - name: Ensure TigerVNC unit file is available.
+#   template:
+#     src: vncserver@.service.j2
+#     dest: /etc/systemd/system/vncserver@:1.service
+#     owner: root
+#     group: root
+#     mode: 0644
+#   notify:
+#     - restart tigervnc
+
+# # TODO: Add some check for user existance
+
+# - name: "Create the remote {{ tigervnc_user_home }}/.vnc directory"
+#   file:
+#     path: "{{ tigervnc_user_home }}/.vnc"
+#     owner: "{{ tigervnc_user }}"
+#     group: "{{ tigervnc_user }}"
+#     mode: 0755
+#     state: directory
+#   notify:
+#     - restart tigervnc
+
+# - name: "Set vnc password for user {{ tigervnc_user }}."
+#   shell: |
+#     echo {{ tigervnc_vncpass }} | vncpasswd -f > {{ tigervnc_user_home }}/.vnc/passwd
+#   args:
+#     executable: /bin/bash
+#   notify:
+#     - restart tigervnc
+
+# - name: "Change permissions to 600 for {{ tigervnc_user_home }}/.vnc/passwd"
+#   file:
+#     path: "{{ tigervnc_user_home }}/.vnc/passwd"
+#     owner: "{{ tigervnc_user }}"
+#     group: "{{ tigervnc_user }}"
+#     mode: 0600
+#   notify:
+#     - restart tigervnc
+
+# # ansible 2.2 and above
+# # - name: Enable TigerVNC server.
+# #   systemd:
+# #     name: vncserver@:1.service
+# #     enabled: yes
+
+# - name: Enable TigerVNC server.
+#   service:
+#     name: vncserver@:1.service
+#     enabled: yes
+
+# - name: Add vnc-server in the firewall.
+#   firewalld:
+#     service: vnc-server
+#     permanent: true
+#     state: enabled
+#   notify:
+#     - firewall-cmd--reload
+    
+# # ---
+
+
+# # - name: Install a list of packages 
+# #   become: true
+# #   yum:
+# #     name:
+# #       - "@Server with GUI"
+# #       - tigervnc-server 
+# #       - mesa-libGL
+# #       - gconf-editor 
+# #     state: present
+  
+# # - name: Create Folder for VNC
+# #   ansible.builtin.file:
+# #     path: /home/opc/.vnc/
+# #     owner: opc
+# #     group: opc
+# #     mode: 0755
+# #     state: directory
+
+# # - name: Create file for Password 
+# #   ansible.builtin.file:
+# #     path: /home/opc/.vnc/passwd
+# #     owner: opc
+# #     group: opc
+# #     mode: '0600'
+# #     state: touch
+
+# # - name update password
+# #     shell: "Oracle! | sudo tee -a ~/.vnc/passwd"
+
+# # # - lineinfile:
+# # #     path: ~/.vnc/passwd
+# # #         line: "Oracle!"
+
+# # # - name: Set up resolution 
+# # #   ansible.builtin.command:
+# # #     cmd: vncserver -nolisten local -geometry 1680x1050
+
+# # - name: Create password
+# #   shell: vncserver
+
+
