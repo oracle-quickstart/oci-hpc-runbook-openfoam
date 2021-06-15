@@ -33,6 +33,8 @@ The above baseline infrastructure provides the following specifications:
 
 ### Step 3. Make sure your bashrc is correct - it should look like the one below
 
+> vi ~/.bashrc
+
 ```
 # .bashrc
 
