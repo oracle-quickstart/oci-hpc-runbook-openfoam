@@ -31,12 +31,32 @@ The above baseline infrastructure provides the following specifications:
 > ssh hpc-node-1
 
 
-### Step 3. Navigate to OpenFOAM directory 
+### Step 3. Make sure your bashrc is correct - it should look like the one below
+
+```
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+alias status='tail /home/opc/autoscaling/logs/crontab_slurm.log | grep -A50 -m1 -e `date +"%Y-%m-%d"`'
+export PATH=/usr/mpi/gcc/openmpi-4.1.0rc5/bin/:$PATH
+export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-4.1.0rc5/lib64/:$LD_LIBRARY_PATH
+source /nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/etc/bashrc
+```
+> source ~/.bashrc
+
+### Step 4. Navigate to OpenFOAM directory 
 
 > cd /nfs/cluster/OpenFOAM/work
 
-
-### Step 4. Run OpenFOAM 
+### Step 5. Run OpenFOAM 
 
 > ./Allrun **NUM OF CORES**
 
