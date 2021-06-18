@@ -98,7 +98,7 @@ When you no longer need the deployment, you can run this command to destroy the 
 
 # Architecture
 
-<img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/HPC_arch_draft.png" height="500"> 
+<img align="middle" src="https://github.com/oracle-quickstart/oci-hpc-runbook-openfoam/blob/main/images/architecture-hpc.png" height="500"> 
 
 The above baseline infrastructure provides the following specifications:
 -	Networking
