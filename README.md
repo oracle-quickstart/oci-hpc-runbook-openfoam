@@ -59,10 +59,6 @@ user_ocid            = "<user_ocid>"
 fingerprint          = "<finger_print>"
 private_key_path     = "<pem_private_key_path>"
 
-# database
-ATP_password           = "<ATP_user_password>"
-ATP_data_guard_enabled = false # set the value to true only when you want to enable standby and then re-run terraform apply
-
 # Region
 region = "<oci_region>"
 
