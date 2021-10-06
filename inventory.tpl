@@ -42,3 +42,4 @@ instance_pool_ocpus=${instance_pool_ocpus}
 monitoring=${monitoring}
 hyperthreading=${hyperthreading}
 ldap=${ldap}
+
