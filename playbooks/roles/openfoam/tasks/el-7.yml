@@ -8,53 +8,98 @@
       - libGLU
     state: present
 
-- name: Create /nfs/cluster/OpenFOAM/install
+- name: Create /nfs/scratch/OpenFOAM/v2006/install
   become: true
   file:
-    path: "{{cluster_nfs_path}}/OpenFOAM/install"
+    path: "/nfs/scratch/OpenFOAM/v2006/install"
+    state: directory
+    owner: opc
+    mode: 0770
+    group: opc
+    recurse: yes
+
+- name: Create /nfs/scratch/OpenFOAM/v8/install
+  become: true
+  file:
+    path: "/nfs/scratch/OpenFOAM/v8/install"
     state: directory
     owner: opc
     mode: 0770
     group: opc
     recurse: yes
     
-- name: wget download openfoam
+- name: wget download openfoam v2006
   get_url:
-    url: "https://objectstorage.us-ashburn-1.oraclecloud.com/p/3EgVwQENXyVrafbKoHNnQIJprt3jTT25iOVjs5vb9uUSGu_rUQb5DXjfqmTfwF2i/n/hpc/b/bucket-20201112-1340/o/openfoam7_OL77_RDMA.tar"
-    dest: "{{cluster_nfs_path}}/OpenFOAM/install/openfoam7_OL77_RDMA.tar"
-      
-      
-- name: untar Openfoam step 
-  unarchive:
-    src: "{{cluster_nfs_path}}/OpenFOAM/install/openfoam7_OL77_RDMA.tar"
-    dest: "{{cluster_nfs_path}}/OpenFOAM/install" 
+    url: "https://objectstorage.us-phoenix-1.oraclecloud.com/p/nqwCFv7INBNcemmLElSIA3MllnNRAB8x98kYDD4VJCSxJnV4v2rxC9c_NZG2BJ0W/n/hpc/b/HPC_APPS/o/OpenFOAM-v2006_GCC_IMPI.tar"
+    dest: "/nfs/scratch/OpenFOAM/v2006/install/OpenFOAM-v2006_GCC_IMPI.tar"
+
+- name: wget download openfoam v8
+  get_url:
+    url: "https://objectstorage.us-phoenix-1.oraclecloud.com/p/fhPRDkuqJRKcBVolGshE3Xeo9Kk0liV85NAIFN8HLIZ_6i-Z1f3I0MCkc5dUgbPH/n/hpc/b/HPC_APPS/o/OpenFOAM-v8_GCC_IMPI.tar"
+    dest: "/nfs/scratch/OpenFOAM/v8/install/OpenFOAM-v8_GCC_IMPI.tar"
+
+- name: untar OpenFOAM v2006
+  unarchive: 
+    src: "{{ item }}" 
+    dest: "/nfs/scratch/OpenFOAM/v2006/install" 
+  with_fileglob:
+    - "/nfs/scratch/OpenFOAM/v2006/install/*"
+
+- name: untar OpenFOAM v8
+  unarchive: 
+    src: "{{ item }}" 
+    dest: "/nfs/scratch/OpenFOAM/v8/install" 
+  with_fileglob:
+    - "/nfs/scratch/OpenFOAM/v8/install/*"
     
-- name: Create /nfs/cluster/OpenFOAM/work
+- name: Create /nfs/cluster/OpenFOAM/v2006/models
   become: true
   file:
-    path: "{{cluster_nfs_path}}/OpenFOAM/work"
+    path: "/nfs/scratch/OpenFOAM/v2006/models"
     state: directory
     owner: opc
     mode: 0770
     group: opc
     recurse: yes
     
-- name: wget download motobike
+- name: Create /nfs/cluster/OpenFOAM/v8/models
+  become: true
+  file:
+    path: "/nfs/scratch/OpenFOAM/v8/models"
+    state: directory
+    owner: opc
+    mode: 0770
+    group: opc
+    recurse: yes
+
+- name: wget download motorbike 42M
   get_url:
-    url: "https://objectstorage.us-phoenix-1.oraclecloud.com/p/JnZ4PqxqrYVqoX5_3ErNJcHU6--KlkPUXUEamJSo3R8/n/hpc/b/HPC_BENCHMARKS/o/motorbike_RDMA.tgz"
-    dest: "{{cluster_nfs_path}}/OpenFOAM/work/motorbike_RDMA.tgz"
-      
-      
-- name: untar motobike step 
-  unarchive:
-    src: "{{cluster_nfs_path}}/OpenFOAM/work/motorbike_RDMA.tgz"
-    dest: "{{cluster_nfs_path}}/OpenFOAM/work"     
-    
+    url: "https://objectstorage.us-phoenix-1.oraclecloud.com/p/uId0w3q2YOIBBBl_QfjbO0ep-ixbDUrrn0OMBZiAVfgx7eosRchMzFWNUfwPrSqB/n/hpc/b/HPC_BENCHMARKS/o/OpenFOAM_motorbike_42M_Model.tar"
+    dest: "/nfs/scratch/OpenFOAM/v2006/models/OpenFOAM_motorbike_42M_Model.tar"
+
+- name: wget download motorbike 2M
+  get_url:
+    url: "https://objectstorage.us-phoenix-1.oraclecloud.com/p/tyE3Jo5JnlV0wS4ywoPJfyavXdXhmG4lRsAporCoOqg/n/hpc/b/HPC_BENCHMARKS/o/motorbike_RDMA.tgz"
+    dest: "/nfs/scratch/OpenFOAM/v8/models/motorbike_RDMA.tgz"
+
+- name: untar motorbike 42M
+  unarchive: 
+    src: "{{ item }}" 
+    dest: "/nfs/scratch/OpenFOAM/v2006/models/" 
+  with_fileglob:
+    - "/nfs/scratch/OpenFOAM/v2006/models/*"
+
+- name: untar motorbike 2M
+  unarchive: 
+    src: "{{ item }}" 
+    dest: "/nfs/scratch/OpenFOAM/v8/models/" 
+  with_fileglob:
+    - "/nfs/scratch/OpenFOAM/v8/models/*"  
     
 - name: Create /nfs/cluster/paraview
   become: true
   file:
-    path: "{{cluster_nfs_path}}/paraview"
+    path: "/nfs/scratch/paraview"
     state: directory
     owner: opc
     mode: 0770
@@ -62,18 +107,18 @@
     recurse: yes
     
 - name: wget download paraview
-  shell: 'curl -d submit="Download" -d version="v4.4" -d type="binary" -d os="Linux" -d downloadFile="ParaView-4.4.0-Qt4-Linux-64bit.tar.gz" https://www.paraview.org/paraview-downloads/download.php > {{cluster_nfs_path}}/paraview/paraview.tar.gz'
+  shell: 'curl -d submit="Download" -d version="v4.4" -d type="binary" -d os="Linux" -d downloadFile="ParaView-4.4.0-Qt4-Linux-64bit.tar.gz" https://www.paraview.org/paraview-downloads/download.php > /nfs/scratch/paraview/paraview.tar.gz'
       
 - name: untar paraview step 
   unarchive:
-    src: "{{cluster_nfs_path}}/paraview/paraview.tar.gz"
-    dest: "{{cluster_nfs_path}}/paraview"         
+    src: "/nfs/scratch/paraview/paraview.tar.gz"
+    dest: "/nfs/scratch/paraview"         
     
     
-- name: create tcp hostfile
-  template:
-    src: templates/hostfile_tcp.j2
-    dest: "{{cluster_nfs_path}}/OpenFOAM/work/hostfile"
+# - name: create tcp hostfile
+#   template:
+#     src: templates/hostfile_tcp.j2
+#     dest: "/nfs/scratch/OpenFOAM/work/hostfile"
     
     
     

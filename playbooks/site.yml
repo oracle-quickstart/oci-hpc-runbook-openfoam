@@ -1,3 +1,4 @@
+
 - hosts: compute
   become: true
   vars: 
@@ -169,11 +170,10 @@
         name: grafana
       when: monitoring|default(false)|bool
     - include_role:
-        name: openfoam
-#     - include_role:
-#         name: vnc
+        name: openfoam 
 
-- hosts: all
+
+- hosts: bastion
   vars:
     destroy: false
     initial: true
@@ -183,26 +183,21 @@
         name: spack
       when: spack|default(false)|bool
     - include_role: 
+        name: telegraf
+      when: monitoring|default(false)|bool
+    - include_role: 
+        name: slurm
+      when: slurm|default(false)|bool
+
+- hosts: compute
+  vars:
+    destroy: false
+    initial: true
+    download_path: "{{ '/nfs/cluster/' if cluster_nfs|bool else '/tmp' }}"
+  tasks: 
+    - include_role: 
         name: slurm
       when: slurm|default(false)|bool
     - include_role: 
         name: telegraf
       when: monitoring|default(false)|bool
-
-    - name: set WM_PROJECT_DIR
-      shell: "WM_PROJECT_DIR=nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/"
-      
-    - name: tee path  
-      shell: "echo export PATH=/usr/mpi/gcc/openmpi-4.1.0rc5/bin/:'$PATH' | sudo tee -a ~/.bashrc"
-
-    - name: export libpath   
-      shell: "echo export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-4.1.0rc5/lib64/:'$LD_LIBRARY_PATH' | sudo tee -a ~/.bashrc"
-  
-    - name: tee bashrc
-      shell: "echo source /nfs/cluster/OpenFOAM/install/OpenFOAM/OpenFOAM-7/etc/bashrc | sudo tee -a ~/.bashrc"
-
-    - name: link lib
-      shell: "sudo ln -s /usr/lib64/libboost_thread-mt.so /usr/lib64/libboost_thread.so" 
-      
-    - name: source
-      shell: "source ~/.bashrc" 
