@@ -1,3 +1,14 @@
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
+variable "release" {
+  description = "Reference Architecture Release (OCI Architecture Center)"
+  default     = "1.1"
+}
+
+variable "fingerprint" {}
+variable "user_ocid" {}
+variable "private_key_path" {}
 variable "region" {}
 variable "tenancy_ocid" {}
 variable "targetCompartment" {}
@@ -31,13 +42,13 @@ variable "vcn_id" { default = "" }
 variable "use_existing_vcn" {}
 variable "public_subnet_id" { default = "" }
 variable "private_subnet_id" { default = "" }
-variable "vcn_subnet" { default = "" }
-variable "public_subnet" { default = "" }
-variable "additional_subnet" { default = "" }
-variable "private_subnet" { default = "" }
+variable "vcn_subnet" { default = "172.16.0.0/21" }
+variable "public_subnet" { default = "172.16.0.0/24" }
+variable "additional_subnet" { default = "172.16.1.0/24" }
+variable "private_subnet" { default = "172.16.4.0/22" }
 variable "ssh_cidr" { default = "0.0.0.0/0" }
 #openfoam
-variable "openfoam" {}
+variable "openfoam" { default = true }
 variable "slurm" { default = false }
 variable "ldap" { default = true }
 variable "spack" { default = false }

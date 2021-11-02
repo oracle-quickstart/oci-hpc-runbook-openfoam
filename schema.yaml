@@ -1,9 +1,12 @@
+## Copyright © 2021, Oracle and/or its affiliates. 
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 ---
-title: HPC cluster
-description: Oracle Cloud HPC cluster
+title: OpenFOAM Quick-start on Oracle Cloud Infrastructure
+description: OpenFOAM Quick-start on Oracle Cloud Infrastructure
 schemaVersion: 1.1.0
 version: "2021040901"
-informationalText: Automated HPC cluster deployment
+informationalText: OpenFOAM Quick-start on Oracle Cloud Infrastructure
 logoUrl: https://cloudmarketplace.oracle.com/marketplace/content?contentId=80357668
 
 source:
@@ -874,3 +877,8 @@ variables:
         - ${add_nfs} 
         - not:
           - ${create_ffs}
+  release:
+    type: string
+    required: false
+    visible: false
+    title: "Reference Architecture Release (OCI Architecture Center)"
