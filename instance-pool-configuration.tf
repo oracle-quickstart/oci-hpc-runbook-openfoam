@@ -1,3 +1,6 @@
+## Copyright (c) 2022 Oracle and/or its affiliates.
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 resource "oci_core_instance_configuration" "instance_pool_configuration" {
   count = ( ! var.cluster_network ) && ( var.node_count > 0 ) ? 1 : 0
   depends_on     = [oci_core_app_catalog_subscription.mp_image_subscription]
@@ -43,5 +46,6 @@ resource "oci_core_instance_configuration" "instance_pool_configuration" {
   }
 
   source = "NONE"
+  defined_tags                = { "${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }
 

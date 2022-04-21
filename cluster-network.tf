@@ -1,3 +1,6 @@
+## Copyright (c) 2022 Oracle and/or its affiliates.
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 resource "oci_core_volume" "nfs-cluster-network-volume" { 
   count = var.scratch_nfs_type_cluster == "block" && var.node_count > 0 ? 1 : 0 
   availability_domain = var.ad
@@ -6,6 +9,7 @@ resource "oci_core_volume" "nfs-cluster-network-volume" {
   
   size_in_gbs = var.cluster_block_volume_size
   vpus_per_gb = split(".", var.cluster_block_volume_performance)[0]
+    defined_tags = { "${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }
 
 resource "oci_core_volume_attachment" "cluster_network_volume_attachment" { 
@@ -38,5 +42,6 @@ resource "oci_core_cluster_network" "cluster_network" {
     create = "180m"
   }
   display_name = local.cluster_name
+    defined_tags = { "${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }
 

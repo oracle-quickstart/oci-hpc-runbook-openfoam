@@ -1,3 +1,6 @@
+## Copyright (c) 2022 Oracle and/or its affiliates.
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 locals {
 //  listing_number = split(".", var.marketplace_listing)[0]
     mp_listing_id = var.use_marketplace_image ? var.marketplace_listing_id : ""

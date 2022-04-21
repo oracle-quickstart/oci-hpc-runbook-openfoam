@@ -1,3 +1,6 @@
+## Copyright (c) 2022 Oracle and/or its affiliates.
+## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+
 resource "oci_mysql_mysql_db_system" "monitoring_mysql_db_system" {
     #Required
     count          = var.autoscaling_monitoring && var.autoscaling_mysql_service ? 1 : 0
@@ -13,4 +16,5 @@ resource "oci_mysql_mysql_db_system" "monitoring_mysql_db_system" {
     backup_policy {
         is_enabled = false
     }
+    defined_tags                = { "${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
 }
