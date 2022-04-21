@@ -1,6 +1,6 @@
-## Copyright © 2021, Oracle and/or its affiliates. 
+## Copyright (c) 2022 Oracle and/or its affiliates.
 ## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 terraform {
-  required_version = ">= 0.13"
+  required_version = "~> 1.0"
 }
